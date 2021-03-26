@@ -1,4 +1,4 @@
-all: Duckiefloat_ROS_Diagram.pdf
+all: Locobot_ROS_Diagram.pdf
 
 fsm: default.pdf
 
@@ -10,9 +10,6 @@ fsm: default.pdf
 
 
 update-continuous: 
-	python recreate_on_changes.py  Duckiefloat_ROS_Diagram.dot.in Duckiefloat_ROS_Diagram.dot
+	python recreate_on_changes.py  Locobot_ROS_Diagram.dot.in Locobot_ROS_Diagram_ROS_Diagram.dot
 
-upload-andrea:
-	cp Duckiefloat_ROS_Diagram.pdf /Users/andrea/a.censi@gmail.com/1601-Duckietown/duckietown-public/design/Duckiefloat_ROS_Diagram.pdf
-	
-	
+
