@@ -58,7 +58,6 @@ digraph D {
 		move_group_node->locobot_arm_joint_controller_trajectory_cancel->locobot_controller_node;
 		place_cancel->move_group_node;
 		
-		// == new === //
 		tf_static->move_group_commander_node; 
 	}
 
