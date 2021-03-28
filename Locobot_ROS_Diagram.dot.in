@@ -5,69 +5,53 @@ digraph D {
 	edge [penwidth=1.5]
 	node [penwidth=2.0]
 
-	subgraph cluster_legend{
-		label="legend";
-		missing     [!NODE:missing!,     label="missing"];
-		designed    [!NODE:designed!,    label="designed"];
-		development [!NODE:development!, label="development"];
-		compiled    [!NODE:compiled!,    label="compiled"];
-		documented  [!NODE:documented!,  label="documented"];
-		tested      [!NODE:tested!,      label="tested"];
-		missing->designed->development->compiled->documented->tested;
-	}
-
-	subgraph cluster_pyrobot {
-		label="Pyrobot";
-		pyrobot_node [!NODE:compiled!, label="pyrobot"];
+	subgraph cluster_perception {
+		label="Perception";
+		rs_rgbd [!NODE:compiled!, label="rs_rgbd.launch"];
  		
- 		gripper_close    [!TOPIC!, label="/gripper/close"];
-		collision_object [!TOPIC!, label="/collision_object"];
-		pyrobot_node->gripper_close;
-		pyrobot_node->collision_object;
+ 		register_depth    [!TOPIC!, label="register_depth"];
+		points_xyzrgb_sw_registered [!TOPIC!, label="points_xyzrgb_sw_registered"];
+		points_xyzrgb_hw_registered [!TOPIC!, label="points_xyzrgb_hw_registered"];
+	
+		rs_rgbd->register_depth;
+		rs_rgbd->points_xyzrgb_sw_registered;
+		rs_rgbd->points_xyzrgb_hw_registered;
 	}
 
-	subgraph cluster_tf {
-		label = "tf";
-		tf_node [!NODE:compiled!, label="calivration_tf_broadcaster"];
+	subgraph cluster_slam {
+		label = "SLAM";
+		orb_slam2_realsense [!NODE:compiled!, label="orb_slam2_realsense.launch"];
+		orb_slam2_rgbd [!TOPIC!, label="orb_slam2_rgbd"];
+
+		gpmp_action_server [!TOPIC!, label="gpmp_action_server"];		
+
+		orb_slam2_realsense->orb_slam2_rgbd;
+	}
+
+	subgraph cluster_mobility {
+		label = "Mobility";
+		main_base [!NODE:compiled!, label="main_base.launch"];
+
+		ca_driver [!TOPIC!, label="ca_driver"];
 		
-		tf [!TOPIC!, label="/tf"];
-		tf_node->tf;
-	}
-
-	subgraph cluster_locobot {
-		label = "locobot";
-		locobot_controller_node [!NODE:compiled!, label="locobot_controller"];
-
-		gripper_state [!TOPIC!, label="/gripper/state"];
-		joint_state   [!TOPIC!, label="/joint/state"];
-		locobot_arm_joint_controller_trajectory_result [!TOPIC!, label="/locobot_arm/joint_controller/trajectory/result"];
-
-		robot_state_publisher_node [!NODE:compiled!, label="robot_state_publisher"];
-		tf_static [!TOPIC!, label="/tf_static"];
-
-		move_group_node [!NODE:compiled!, label="move_group"];
-		locobot_arm_joint_controller_trajectory_cancel [!TOPIC!, label="/locobot_arm/joint_controller/trajectory/cancel"];
-		place_status [!TOPIC!, label="/place/status"];
-
-		move_group_commander_node [!NODE:compiled!, label="move_group_commander"];
-		place_cancel [!TOPIC!, label="/place/cancel"];
-
-		locobot_controller_node->locobot_arm_joint_controller_trajectory_result->move_group_node; 
-		locobot_controller_node->gripper_state;
-		locobot_controller_node->joint_state->robot_state_publisher_node->tf_static->move_group_node->place_status->move_group_commander_node->place_cancel;
-		move_group_node->locobot_arm_joint_controller_trajectory_cancel->locobot_controller_node;
-		place_cancel->move_group_node;
+		pyrobot_kinematics [!TOPIC!, label="pyrobot_kinematics"];
+		pyrobot_moveit [!TOPIC!, label="pyrobot_moveit "];
+		turtlebot_controller_node[!TOPIC!, label="turtlebot_controller_node"];
 		
-		tf_static->move_group_commander_node; 
+		main_base->ca_driver; 
 	}
 
-	gripper_state->pyrobot_node;
-	tf_static->pyrobot_node;
+	subgraph cluster_gripper {
+        label = "Gripper";
+        dynamixel_controllers [!NODE:compiled!, label="dynamixel_controllers.launch"];
 
-	collision_object->move_group_node;
+        locobot_controller [!TOPIC!, label="locobot_controller"];
+                
+    	calibration_publish_transforms [!TOPIC!, label="calibration_publish_transforms"];
 
-	tf->move_group_node;
-	tf->move_group_commander_node;
-	tf->pyrobot_node;	
+        dynamixel_controllers->spawn_urdf;
+      
+        }
+
 
 }
