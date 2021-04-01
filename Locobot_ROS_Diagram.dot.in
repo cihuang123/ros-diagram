@@ -5,13 +5,19 @@ digraph D {
 	edge [penwidth=1.5]
 	node [penwidth=2.0]
 
+  subgraph cluster_legend{
+		label="legend";
+		launch       [!TOPIC!, label="launch file"];
+		rosnode      [!NODE:tested!, label="rosnode"];
+	}
+
 	subgraph cluster_perception {
 		label="Perception";
-		rs_rgbd [!NODE:compiled!, label="rs_rgbd.launch"];
+		rs_rgbd [!TOPIC!, label="rs_rgbd.launch"];
  		
- 		register_depth    [!TOPIC!, label="register_depth"];
-		points_xyzrgb_sw_registered [!TOPIC!, label="points_xyzrgb_sw_registered"];
-		points_xyzrgb_hw_registered [!TOPIC!, label="points_xyzrgb_hw_registered"];
+ 		register_depth    [!NODE:tested!, label="register_depth"];
+		points_xyzrgb_sw_registered [!NODE:tested!, label="points_xyzrgb_sw_registered"];
+		points_xyzrgb_hw_registered [!NODE:tested!, label="points_xyzrgb_hw_registered"];
 	
 		rs_rgbd->register_depth;
 		rs_rgbd->points_xyzrgb_sw_registered;
@@ -20,35 +26,36 @@ digraph D {
 
 	subgraph cluster_slam {
 		label = "SLAM";
-		orb_slam2_realsense [!NODE:compiled!, label="orb_slam2_realsense.launch"];
-		orb_slam2_rgbd [!TOPIC!, label="orb_slam2_rgbd"];
+		orb_slam2_realsense [!TOPIC!, label="orb_slam2_realsense.launch"];
+		orb_slam2_rgbd [!NODE:tested!, label="orb_slam2_rgbd"];
 
-		gpmp_action_server [!TOPIC!, label="gpmp_action_server"];		
+		gpmp_action_server [!NODE:tested!, label="gpmp_action_server"];		
 
 		orb_slam2_realsense->orb_slam2_rgbd;
 	}
 
 	subgraph cluster_mobility {
 		label = "Mobility";
-		main_base [!NODE:compiled!, label="main_base.launch"];
+		main_base [!TOPIC!, label="main_base.launch"];
 
-		ca_driver [!TOPIC!, label="ca_driver"];
+		ca_driver [!NODE:tested!, label="ca_driver"];
 		
-		pyrobot_kinematics [!TOPIC!, label="pyrobot_kinematics"];
-		pyrobot_moveit [!TOPIC!, label="pyrobot_moveit "];
-		turtlebot_controller_node[!TOPIC!, label="turtlebot_controller_node"];
+		pyrobot_kinematics [!NODE:tested!, label="pyrobot_kinematics"];
+		pyrobot_moveit [!NODE:tested!, label="pyrobot_moveit "];
+		turtlebot_controller_node[!NODE:tested!, label="turtlebot_controller_node"];
 		
 		main_base->ca_driver; 
 	}
 
 	subgraph cluster_gripper {
         label = "Gripper";
-        dynamixel_controllers [!NODE:compiled!, label="dynamixel_controllers.launch"];
+        dynamixel_controllers [!TOPIC!, label="dynamixel_controllers.launch"];
 
-        locobot_controller [!TOPIC!, label="locobot_controller"];
+        locobot_controller [!NODE:tested!, label="locobot_controller"];
                 
-    	calibration_publish_transforms [!TOPIC!, label="calibration_publish_transforms"];
-
+    	  calibration_publish_transforms [!NODE:tested!, label="calibration_publish_transforms"];
+        spawn_urdf [!NODE:tested!, label="spawn_urdf"];
+        
         dynamixel_controllers->spawn_urdf;
       
         }
