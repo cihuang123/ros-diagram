@@ -10,10 +10,10 @@ def apply_rules(s):
     s = s.replace('!NODE:designed!',    node + 'fillcolor=orange')
     s = s.replace('!NODE:compiled!',    node + 'fillcolor=yellow')
     s = s.replace('!NODE:documented!',  node + 'fillcolor=green')
-    s = s.replace('!NODE:tested!',      node + 'fillcolor=white')
+    s = s.replace('!NODE:tested!',      node + 'fillcolor=lightblue')
     
     s = s.replace('!CONFIG!', 'shape=note, style=filled, fillcolor=grey')
-    s = s.replace('!TOPIC!',    'shape=box, style=filled, fillcolor=white')
+    s = s.replace('!TOPIC!',    'shape=box, style=filled, fillcolor=pink')
     
     warn = \
     """
