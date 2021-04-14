@@ -33,6 +33,7 @@ digraph D {
     dynamixel_controllers [!NODE:tested!, label="dynamixel_controllers.launch"];
 		
     locobot_controller [!TOPIC!, label="locobot_controller"];
+    robot_state_publisher [!TOPIC!, label="robot_state_publisher"];
 
     dynamixel_controllers->locobot_controller;
 
